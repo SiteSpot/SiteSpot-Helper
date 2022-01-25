@@ -3,12 +3,10 @@
 Plugin Name: Sitespot Tools
 Plugin URI: sitespot.co
 Description: Lots of helpful functions.
-Version: 0.2.0
+Version: 0.2.1
 Author: SiteSpot
 Author URI: https://sitespot.co
 */
-
-
 
 add_action('in_admin_header', 'admin_navigator');
 
@@ -56,18 +54,9 @@ function toolbar_link_to_mypage( $wp_admin_bar ) {
 
 
 
- add_action('admin_menu', 'sp_sitespotshop_link');
- function sp_sitespotshop_link() {
-	 //add_menu_page( string $page_title, string $menu_title, string $capability, string $menu_slug, callable $function = '', string $icon_url = '', int $position = null )
-    add_menu_page('Manage your account', 'Your Account', 'list_users', 'sp-account-link', 'render_account_link_page','',0);
- }
 
- function render_account_link_page() {
-	 	echo "<h1>Manage your account</h1>";
-		echo "<p>To manage your billing and subscription, or purchase additional survices, please use the below link.<BR></p>";
-		echo "<p><small>You will need to login again for security purposes. Opens in a new tab.</small></p>";
- 		echo '<h4><a class="button" href="https://sitespotshop.com/my-account/" target="_blank">Visit the SiteSpot shop to manage your account</a></h4>';
- }
+
+
 
 
 
@@ -334,30 +323,6 @@ add_filter( 'body_class', 'add_featured_image_body_class' );
 
 
 
-//* Noindex on the post type pages
-add_filter( 'the_seo_framework_robots_meta_array', function( $meta = array() ) {
-
-	if ( 'fl-builder-template' === get_post_type() ) {
-		$meta['noindex'] = 'noindex';
-	}
-
-	return $meta;
-}, 10, 1 );
-
-//* Remove SEO metabox, SEO Bar and sitemap support.
-add_filter( 'the_seo_framework_supported_post_type', function( $post_type, $evaluated_post_type = '' ) {
-	
-	if ( 'fl-builder-template' === $evaluated_post_type ) {
-		return false;
-	}
-
-	return $post_type;
-}, 10, 2 );
-
-
-//disable bb inline editing
-add_filter ('fl_inline_editing_enabled', '__return_false' );
-
 //disable gutenberg stuffs
 remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
 add_filter( 'gutenberg_can_edit_post_type', '__return_false' );
@@ -386,44 +351,11 @@ add_action('wp_footer', 'sp_my_sites_scroll_list');
 
 
 
-if( !class_exists('Acf') )
-{
-  include_once( 'inc/advanced-custom-fields/acf.php' );
-	//define( 'ACF_LITE', true );
-	//hide acf from menu
-	//add_filter('advanced-custom-fields/settings/show_admin', '__return_false');
-}
-
-
-//kill featured image for new blogs. this is mess, fix somehow todo
-//remove leagacy tools
-if( $blog_id < 160 && $blog_id != 1 && $blog_id != 157 && $blog_id != 141 && $blog_id != 143 && $blog_id != 119){
-	require_once('inc/template_triggers.php');
-	require_once('inc/case_studies.php');
-	require_once('inc/logos.php');
-	require_once('inc/testimonials.php');
-}	 
-
-
-
-
 //include custom admin styles
 function sp_scripts_styles(){
 	wp_enqueue_style( 'custom_wp_admin_css', plugins_url('inc/sp_admin_styles.css', __FILE__ ));
 }
 add_action( 'admin_enqueue_scripts', 'sp_scripts_styles' );
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -440,27 +372,6 @@ function sp_page_builder_clean() {
 add_action( 'wp_footer', 'sp_page_builder_clean');
 
 add_filter('wp_nav_menu_items', 'do_shortcode');
-
-
-//Customizer modify palette
-function sp_customize_palette() {
-    wp_enqueue_script("customize-palette" , plugins_url( 'sitespot/customizerPalette.js', __FILE__ ),array( 'jquery' ));
-}
-add_action( 'customize_controls_enqueue_scripts', 'sp_customize_palette' );
-
-
-
-add_action('customize_controls_print_scripts', function(){
-	
-	$presetColors = get_option('_fl_builder_color_presets'); //get presets
-	array_walk($presetColors, function(&$value, $key) { $value = '"#' . $value . '"'; } ); // add a # and quotes around colors
-	$colz = "<script> var presetcolors = ["; //setup
-	$colz .= implode(",",$presetColors);	 // add colors
-	$colz .= "] 
-	</script>";
-
-	echo $colz;	
-});
 
 
 
@@ -501,29 +412,6 @@ add_shortcode('sp-page-content', 'sp_post_content_short');
 
 
 
-//register post type (only if its on in the settings page)
-function ff_register_post_type($action, $args, $id)
-{
-	//$titan = TitanFramework::getInstance( 'fasterforward' );
-
-	//if($titan->getOption($id)) // if settings page is enabled
-	//{
-		register_post_type( $action, $args);//register post type
-	//	flush_rewrite_rules(false);
-	//}
-}
-
-
-//fix bug(?) with incorrect height in customizer selects
-function sp_custom_customize_enqueue() {
-	echo "<style>
-	.customize-control select {
-  	min-height: 40px !important;
-	}
-</style>";
-}
-add_action( 'customize_controls_enqueue_scripts', 'sp_custom_customize_enqueue' );
-
 
 // ###################            TEST ZONE        ##################### 
 
@@ -538,67 +426,6 @@ add_action('init','testFunctions');
 
 
 
-
-
-function sp_add_media() {
-	// first check if data is being sent and that it is the data we want
-  if ( isset( $_POST["url"] ) ) {
-		// now set our response var equal to that of the POST var (this will need to be sanitized based on what you're doing with with it)
-		$response = $_POST["url"];
-		// send the response back to the front end
-    
-    echo addImageFromUrl($response);
-      
-		die();
-	}
-}
-add_action( 'wp_ajax_sp_add_media', 'sp_add_media' );
-
-
-
-function addImageFromUrl($image){
-	// only need these if performing outside of admin environment
-	require_once(ABSPATH . 'wp-admin/includes/media.php');
-	require_once(ABSPATH . 'wp-admin/includes/file.php');
-	require_once(ABSPATH . 'wp-admin/includes/image.php');
-
-	$post_id = 0;
-
-	// magic sideload image returns an HTML image, not an ID
-	$media = media_sideload_image($image, $post_id);
-
-	// therefore we must find it so we can set it as featured ID
-	if(!empty($media) && !is_wp_error($media)){
-			$args = array(
-					'post_type' => 'attachment',
-					'posts_per_page' => -1,
-					'post_status' => 'any',
-					'post_parent' => $post_id
-			);
-		
-			// reference new image to set as featured
-			$attachments = get_posts($args);
-		
-			if(isset($attachments) && is_array($attachments)){
-					foreach($attachments as $attachment){
-							// grab source of full size images (so no 300x150 nonsense in path)
-							$image = wp_get_attachment_image_src($attachment->ID, 'full');
-							// determine if in the $media image we created, the string of the URL exists
-							if(strpos($media, $image[0]) !== false){
-									// if so, we found our image. set it as thumbnail
-									set_post_thumbnail($post_id, $attachment->ID);
-									// only want one image
-									break;
-							}
-					}
-			}
-		return true;
-	}
-	return false;
-}
-
-
-
 add_action( 'wp_enqueue_scripts', function(){
 	//enqueue utility scripts like kill links etc
 	
@@ -608,82 +435,6 @@ add_action( 'wp_enqueue_scripts', function(){
 		wp_enqueue_script("admin_bar_helper" , plugins_url( 'inc/admin_bar_helper.js', __FILE__ ),array( 'jquery' ));
 	}
 });
-
-
-function pw_load_scripts() {
-//	wp_enqueue_script('admin-scripts', plugins_url( 'sitespot/admin_scripts.js', __FILE__ ),array( 'jquery' ));
-}
-add_action('admin_enqueue_scripts', 'pw_load_scripts');
-
-
-//remove new css feature of customizer - already in theme
-add_action( 'customize_register', 'prefix_remove_css_section', 15 );
-/**
- * Remove the additional CSS section, introduced in 4.7, from the Customizer.
- * @param $wp_customize WP_Customize_Manager
- */
-function prefix_remove_css_section( $wp_customize ) {
-//	$wp_customize->remove_section( 'custom_css' );
-}
-
-
-
-
-
-
-
-
-
-
-
-function mailme($message, $title = 'mail me message')
-{
-	//print_r if array
-	if(is_array ($message) || is_object($message))
-		$message = print_r($message,true);
-	
-	mail('tom@fasterforward.com.au',$title,$message);
-}
-
-
-function sp_add_query_vars_filter( $vars ){
-	    
-  if(isset($_GET['sp_template_post_id']))
-  {
-    $template_post_id = $_GET['sp_template_post_id'];
-    $post_name = get_post_field('post_name',intval($template_post_id));
-    wp_redirect(site_url("/fl-builder-template/$post_name/fl_builder"));
-    exit;
-  }
-	return $vars;
-}
-
-add_filter( 'query_vars', 'sp_add_query_vars_filter' );
-
-
-function reset_bb_css(){
-	$upload_dir = wp_upload_dir();
-	$files = glob($upload_dir['basedir'] . "/bb-theme/*"); // get all file names
-	foreach($files as $file){ // iterate files
-		//mailme($file);
-		if(strpos($file,".css"))
-			unlink($file); // delete file
-	}
-}
-
-
-
-//remove snap from conflicting og stuffs
-//the seo framework doesnt like SNAP... but we do
-function allow_og_tags_seo_framework($data){
-	
-	unset($data['open_graph']['NextScripts SNAP']);
-		
-	return $data;
-}
-add_filter('the_seo_framework_conflicting_plugins', 'allow_og_tags_seo_framework');
-
-
 
 /*-------------------------------------------------------------------------------
 	Add Body Class on Gforms Submission
@@ -706,186 +457,53 @@ function add_confirmation_class() {
 
 
 
-
-
-
-/**
- * This function adds some styles to the WordPress Customizer
- */
-function my_customizer_styles() { ?>
-	<style>
-		/* hide footer option - we aint using it  */
-#accordion-panel-fl-footer{
-  display:none !important;
-}
-</style>
-	<?php
-
-}
-add_action( 'customize_controls_print_styles', 'my_customizer_styles', 999 );
-
-
-
-function sp_ac_tracking(){
-	$current_user = wp_get_current_user();
-	if ( !($current_user) ){
-		return;
-	}
-	echo "<script>trackcmp_email='$current_user->user_email'</script>";
-}
-
-add_action('wp_head', 'sp_ac_tracking');
-
-
-
-//update CC form
-add_filter( 'gform_stripe_customer_id', function ( $customer_id, $feed, $entry, $form ) {
-    
-	$feed_name  = rgars( $feed, 'meta/feedName' );
-    // The name associated with the Stripe feed.
-    if ( $feed_name == 'Update Billing' ) { 
-        return rgar( $entry, '2' );
-    }
- 
-    return $customer_id;
-}, 10, 4 );
-
-
-
-
-add_filter( 'gform_stripe_charge_authorization_only', function ( $authorization_only, $feed ) {
-    $feed_name  = rgars( $feed, 'meta/feedName' );
-    // The name associated with the Stripe feed.
-    if ( $feed_name == 'Update Billing' ) {
-        return true;
-    }
- 
-    return $authorization_only;
-}, 10, 2 );
-
-
-
-
-
-//* Noindex on the post type pages
-add_filter( 'the_seo_framework_robots_meta_array', function( $meta = array() ) {
-
-	if ( 'fl-builder-template' === get_post_type() ) {
-		$meta['noindex'] = 'noindex';
-	}
-
-	return $meta;
-}, 10, 1 );
-
-//* Remove SEO metabox, SEO Bar and sitemap support.
-add_filter( 'the_seo_framework_supported_post_type', function( $post_type, $evaluated_post_type = '' ) {
-	
-	if ( 'fl-builder-template' === $evaluated_post_type ) {
-		return false;
-	}
-
-	return $post_type;
-}, 10, 2 );
-
-
-//disable bb inline editing
-add_filter ('fl_inline_editing_enabled', '__return_false' );
-
 //disable gutenberg stuffs
 remove_action('try_gutenberg_panel', 'wp_try_gutenberg_panel');
 add_filter( 'gutenberg_can_edit_post_type', '__return_false' );
 
 
-// new blog http(s) fix
-
-function sitespot_wpmu_new_blog_https( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-  
-  $domain = 'https://'.$domain;
-
-  wl(" UPDATE NEW BLOG SITEURL $domain  
-  $blog_id");
-  
-	update_blog_option ($blog_id, 'siteurl', $domain);
-  update_blog_option( $blog_id, 'home', $domain );
-  
-}
-add_action( 'wpmu_new_blog', 'sitespot_wpmu_new_blog_https', 10, 6 );
 
 
 
+function custom_login_logo() {
+echo '<style type="text/css">
+h1 a { background-image: url(https://sitespot.co/wp-content/uploads/2019/04/SiteSpot-Logo-White.svg) !important; 
+       background-size: 80% 100% !important;
+       background-position: center center !important;
+       height: 82px !important;
+       width: 359px !important;
+       margin-left: -14px !important;
+     }
+        body {
+          background: linear-gradient(75deg, #1E73BE, #2ABDD4, #478CC8);
+          background-size: 600% 600%;
+          animation: GradientBackground 15s ease infinite;
+        }
 
+        .login #login #backtoblog>a ,.login #login #nav>a {
+            color: white !important;
+        }
 
+        @keyframes GradientBackground {
+          0% {
+            background-position: 0% 50%;
+          }
 
+          50% {
+            background-position: 100% 50%;
+          }
 
-add_action( 'admin_bar_menu',        'mss_admin_bar_menu' );
-/**
- * Add search field menu item
- *
- * @param WP_Admin_Bar $wp_admin_bar
- * @return void
- */
-function mss_admin_bar_menu( $wp_admin_bar ) {
-	$total_users_sites = count( $wp_admin_bar->user->blogs );
-	$show_if_gt        = apply_filters( 'mms_show_search_minimum_sites', 10 );
-	if ( ! is_user_logged_in() || ( $total_users_sites < $show_if_gt ) ) {
-		return;
-	}
-	$wp_admin_bar->add_menu( array(
-		'parent' => 'my-sites-list',
-		'id'     => 'my-sites-search',
-		'title'  => sprintf(
-			'<label for="my-sites-search-text">%s</label><input type="text" id="my-sites-search-text" placeholder="%s" />',
-			esc_html__( 'Filter My Sites', 'mss' ),
-			esc_attr__( 'Search Sites', 'mss' )
-		),
-		'meta'   => array(
-			'class' => 'hide-if-no-js'
-		)
-	) );
-}
-
-
-
-add_filter('bb_bt_ab_licence_key',function($string){
-  return '0209328033840';
-});
-
-
-
-function sp_custom_excerpt_length( $length ) {
-  
-  $custom = get_option('custom_excerpt_length');
-  
-  if(!$custom){
-    $custom = '55';
-    update_option('custom_excerpt_length', $custom); 
-  }
-  return intval($custom);
-   
-}
-add_filter( 'excerpt_length', 'sp_custom_excerpt_length', 999 );
-
-
-
-function sp_login_logo() { ?>
-<style type=”text/css”>
-#login h1 a, .login h1 a {
-background-image: url(https://sitespot.co/wp-content/uploads/2020/07/SiteSPot_Logo_Blue.svg);
-height:65px;
-width:320px;
-background-size: 320px 65px;
-background-repeat: no-repeat;
-padding-bottom: 30px;
-}
+          100% {
+            background-position: 0% 50%;
+          }
+        };
 </style>
-<?php }
-add_action( 'login_enqueue_scripts', 'sp_login_logo' );
 
-
-
-add_filter( 'hiwnaa_user_cap', 'change_the_hiwnaa_user_cap' );
-
-function change_the_hiwnaa_user_cap( $cap ) {
-	return 'create_sites';
+<script>
+    jQuery(function(){
+        jQuery("#login h1 a").attr("href","https://sitespot.co").text("Powered by SiteSpot");
+    });
+</script>
+';
 }
-
+add_action('login_head', 'custom_login_logo');

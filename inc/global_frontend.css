@@ -65,19 +65,6 @@
   font-style:italic !important;
 }
 
-.welcome-mat-close-cross{
-    position: absolute;
-    top: 10px;
-    right:10px;
-    width:30px;
-    height:30px;
-    font-size: 30px;
-    cursor:pointer;
-}
-
-.welcome-mat-close{
-    cursor:pointer;
-}
 
 .z-index-10{
   z-index:10;
