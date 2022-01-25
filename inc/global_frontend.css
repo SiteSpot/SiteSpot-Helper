@@ -1,0 +1,90 @@
+/* 
+ *   HELPER CLASSES
+ */
+
+
+/* hide pointer on kill-links links */
+.kill-links a {
+    cursor: default;
+}
+
+.kill-sub-menu .sub-menu{
+  display:none !important;
+}
+
+/* hide menu items that are drafts also use JS to remove*/
+.menu-item.draft .menu-item.pending{
+  display:none;
+}
+
+.text-shadow {
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow-white {
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 1);
+}
+
+.hide-labels label{
+  display:none !important;
+}
+
+.center-form .gform_wrapper ul{
+  text-align: center;
+}
+
+/* finds a link further down tree and pulls it up to block with class... applies pointer to look clickable*/
+.pull-a{
+    cursor:pointer;
+}
+
+.center-form .gform_widget .gform_wrapper input[type=text],
+.center-form .gform_widget .gform_wrapper input[type=url],
+.center-form .gform_widget .gform_wrapper input[type=email],
+.center-form .gform_widget .gform_wrapper input[type=tel],
+.center-form .gform_widget .gform_wrapper input[type=number],
+.center-form .gform_widget .gform_wrapper input[type=password] {
+    text-align: center
+}
+
+.center-form .gform_widget .gform_wrapper input[type=submit]{
+  width:auto;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.grayscale-img img, .greyscale-img img{
+  -webkit-filter: grayscale(1);
+  -webkit-filter: grayscale(100%);
+  filter: gray;
+  filter: grayscale(100%);
+}
+
+.italics{
+  font-style:italic !important;
+}
+
+.welcome-mat-close-cross{
+    position: absolute;
+    top: 10px;
+    right:10px;
+    width:30px;
+    height:30px;
+    font-size: 30px;
+    cursor:pointer;
+}
+
+.welcome-mat-close{
+    cursor:pointer;
+}
+
+.z-index-10{
+  z-index:10;
+  position: relative;
+}
+
+.z-index-100{
+  z-index:100;
+  position: relative;
+}
