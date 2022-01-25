@@ -1,3 +1,5 @@
+/* small devices */
+
 @media (min-width:768px){
 	
 }
@@ -52,37 +54,6 @@
     display: none !important;
 }
 
-/*  BB welcome panel - integrate into site design   */
-.welcome-panel {
-    border: none !important;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0);
-    box-shadow: 0 1px 1px rgba(0,0,0,0);
-    background: rgba(0,0,0,0);
-}
-
-.fl-builder-content-161{
-	display:none !important;
-}
-
-/* hide wordpress statistics donate button */
-div#wps_nag.update-nag {
-    display: none !important;
-}
-/* hide wordpress statistics about info */
-
-#wps_about_postbox{
-	display:none !important;
-}
-
-/* hide wordpress statistics newsletter  */
-
-.wp-statistics-settings .postbox-container-1{
-	display:none !important;
-}
-
-#acf_after_title-sortables{
-	min-height:0px !important;
-}
 
 /* hide svg support nag */
 .wp-admin #wpfooter{
@@ -93,49 +64,7 @@ div#wps_nag.update-nag {
   display:none !important;
 }
 
-/* wp mail smtp */
-#wp-mail-smtp-header, #wp-mail-smtp-setting-row-smtp-pass .desc, #wp-mail-smtp-setting-row-smtp-pass pre, #wp-mail-smtp-notice-bar{
-  display:none !important;
-}
-#wp-mail-smtp-pro-banner, .wp-mail-smtp-mailer-sendinblue, #wp-mail-smtp-setting-row-license_key, #wp-mail-smtp-setting-row-license-heading, .wp-mail-smtp-mailer-pepipostapi, .wp-mail-smtp-mailer-amazonses, .wp-mail-smtp-mailer-outlook, .wp-mail-smtp-mailer.suggest-new, [href*="wp-mail-smtp-logs"], [href*="wp-mail-smtp-about"], [href*="wp-mail-smtp&tab=control"], #wp-mail-smtp-setting-row-uninstall{
-  display:none !important;
-}
-/* hide links to the premium logs */
-[href*="?page=wp-mail-smtp&tab=logs"] {
-    display: none !important;
-}
 
-.pods-leaf-watermark-right{
-  display:none !important;
-}
-
-
-#wp-admin-bar-my-sites-search.hide-if-no-js {
-	display: none;
-}
-#wp-admin-bar-my-sites-search label[for="my-sites-search-text"] {
-	clip: rect(1px, 1px, 1px, 1px);
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-}
-#wp-admin-bar-my-sites-search {
-	height: 38px;
-}
-#wp-admin-bar-my-sites-search .ab-item {
-	height: 34px;
-}
-#wp-admin-bar-my-sites-search input {
-	padding: 0 2px;
-	width: 95%;
-	width: calc( 100% - 4px );
-}
-
-/* breeze cache */
-#breeze-and-cloudways, .breeze-header{
-  display:none !important;
-}
 
 /* 301 redirects */
 .settings_page_301bulkoptions .notice, .simple_301_redirects .notice{
@@ -152,43 +81,3 @@ div#wps_nag.update-nag {
   display:none !important;
 }
 
-
-/* POST SMTP */
-
-#postman-main-menu a[href="https://www.facebook.com/groups/post.smtp"]{
-    display:none;   
-}
-
-#postman-main-menu img[src*="/post-smtp/style/images/new.gif"]{
-    display:none;   
-}
-
-a[href="https://wordpress.org/support/plugin/post-smtp/"]{
-    display:none;
-}
-
-a[href="https://postmansmtp.com/category/guides/"]{
-    display:none;
-}
-
-.toplevel_page_postman p>a[href*="postmansmtp.com"]{
-    display:none;
-}
-
-.post-smtp-donation{
-    display:none;
-}
-
-
-/* CLEAN TALK */
-
-.ct_widget_wprapper_total_blocked, #ct_widget_button_view_all, .ct_widget_top_links{
-    display: none;
-}
-
-
-/* UABB glitch */
-
-#uabb-batch-process-start{
-    display:none !important;
-}

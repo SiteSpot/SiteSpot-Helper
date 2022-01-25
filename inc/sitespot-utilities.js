@@ -15,7 +15,7 @@ jQuery( function($) {
   // pull up the first found link to the block element - useful for rows and columns that we want to make clickable
   if (!$("html").hasClass("fl-builder-edit"))
   {
-    $("body:not(.fl-builder-edit) .pull-a").click(function(){
+    $("body:not(.fl-builder-edit) .pull-a").on('click',function(){
       window.location.href = $(this).find('a[href!=""]').attr('href'); //find a link with an existent 'href' [href!=""] href is not blank
     });
   }
